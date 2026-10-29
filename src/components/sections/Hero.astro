@@ -1,0 +1,56 @@
+---
+import { Image } from 'astro:assets';
+import Container from '@/components/Container.astro';
+import ContainerTitle from '@/components/ContainerTitle.astro';
+import WordPullUp from '@/components/ui/WordPullUp.astro';
+import AnimatedShinyText from '@/components/ui/AnimatedShinyText.astro';
+import profileImage from '@/assets/images/profile-image.png';
+import { PROFILE, useTranslations, type Locale } from '@/i18n/ui';
+
+type Props = { index: number; delay: number; locale: Locale };
+const { index, delay, locale } = Astro.props;
+const t = useTranslations(locale).hero;
+---
+
+<Container
+	index={index}
+	delay={delay}
+	class="flex flex-col max-md:px-3"
+	id="about"
+>
+	<div class="flex justify-between md:gap-8 gap-16 flex-col-reverse md:flex-row items-center">
+		<div class="w-auto">
+			<h1 class="mb-4 max-md:text-center">
+				<WordPullUp
+					class="text-4xl space-x-2 font-medium select-none"
+					words={t.title}
+				/>
+			</h1>
+			<p class="text-xl font-thin text-paragraph">{t.callOut}</p>
+		</div>
+		<div class="min-w-[150px] max-md:scale-125 max-md:-translate-y-3">
+			<Image
+				src={profileImage}
+				alt={PROFILE.name}
+				width={140}
+				densities={[1, 2]}
+				loading="eager"
+				fetchpriority="high"
+				class="rounded-full m-auto"
+			/>
+			<div class="relative size-0 -translate-y-10 translate-x-2 rotate-6">
+				<div class="w-[140px] p-1 h-fit bg-white shadow-standard rounded-md hover:bg-slate-50 dark:bg-black dark:shadow-none dark:hover:bg-black">
+					<AnimatedShinyText class="text-center">
+						<span>{PROFILE.name}</span>
+					</AnimatedShinyText>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="w-auto">
+		<ContainerTitle class="md:mt-20 mt-5 text-xl mb-4">
+			{t.about}
+		</ContainerTitle>
+		<p class="font-thin text-paragraph text-justify">{t.description}</p>
+	</div>
+</Container>

@@ -1,0 +1,82 @@
+---
+import '@/styles/global.css';
+import fontUrl from '@fontsource-variable/funnel-sans/files/funnel-sans-latin-wght-normal.woff2?url';
+import GridPattern from '@/components/GridPattern.astro';
+import SEO from '@/components/SEO.astro';
+import Nav from '@/components/islands/Nav';
+import {
+	localePath,
+	otherLocale,
+	useTranslations,
+	type Locale,
+} from '@/i18n/ui';
+
+type Props = {
+	locale: Locale;
+	title?: string;
+	description?: string;
+	noindex?: boolean;
+};
+const { locale, noindex } = Astro.props;
+const t = useTranslations(locale);
+const title = Astro.props.title ?? t.meta.title;
+const description = Astro.props.description ?? t.meta.description;
+---
+
+<!doctype html>
+<html lang={locale}>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!-- Theme before first paint (same storage key/behaviour as next-themes in v3) -->
+		<script is:inline>
+			(() => {
+				let stored = null;
+				try {
+					stored = localStorage.getItem('theme');
+				} catch {}
+				const dark =
+					stored === 'dark' ||
+					((!stored || stored === 'system') &&
+						matchMedia('(prefers-color-scheme: dark)').matches);
+				document.documentElement.classList.toggle('dark', dark);
+				document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
+			})();
+		</script>
+		<link
+			rel="preload"
+			href={fontUrl}
+			as="font"
+			type="font/woff2"
+			crossorigin
+		/>
+		<link rel="icon" href="/favicon.ico" sizes="32x32" />
+		<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+		<link rel="manifest" href="/site.webmanifest" />
+		<link rel="sitemap" href="/sitemap-index.xml" />
+		<meta name="color-scheme" content="light dark" />
+		<SEO
+			locale={locale}
+			title={title}
+			description={description}
+			noindex={noindex}
+		/>
+	</head>
+	<body>
+		<GridPattern
+			width={40}
+			height={40}
+			x={-1}
+			y={-1}
+			strokeDasharray="4 2"
+			class="sm:[mask-image:radial-gradient(60vw_circle_at_center,white,transparent)] fixed"
+		/>
+		<Nav
+			client:load
+			locale={locale}
+			alternateHref={localePath(otherLocale(locale))}
+		/>
+		<slot />
+	</body>
+</html>

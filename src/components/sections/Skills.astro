@@ -1,0 +1,22 @@
+---
+import Container from '@/components/Container.astro';
+import ContainerTitle from '@/components/ContainerTitle.astro';
+import Technology from '@/components/ui/Technology';
+import { ALL_TECH, SKILLS } from '@/data/technologies';
+import { useTranslations, type Locale } from '@/i18n/ui';
+
+type Props = { index: number; delay: number; locale: Locale };
+const { index, delay, locale } = Astro.props;
+const t = useTranslations(locale).skills;
+---
+
+<Container index={index} delay={delay} id="skills">
+	<ContainerTitle>{t.title}</ContainerTitle>
+	<ul class="flex flex-wrap gap-3">
+		{SKILLS.map((tech) => (
+			<li>
+				<Technology technology={ALL_TECH[tech]} />
+			</li>
+		))}
+	</ul>
+</Container>

@@ -1,0 +1,256 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/funnel-sans/index.css';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * Design tokens (ported 1:1 from v3 globals.css).
+ * Raw HSL channels, wrapped with hsl() in @theme below.
+ */
+:root {
+	--background: 0 0% 100%;
+	--container-even: 0 0% 100%;
+	--container-odd: 210 40% 98%;
+	--foreground: 0 0% 3.9%;
+	--card: 0 0% 100%;
+	--card-foreground: 0 0% 3.9%;
+	--popover: 0 0% 100%;
+	--popover-foreground: 0 0% 3.9%;
+	--primary: 0 0% 9%;
+	--primary-foreground: 0 0% 98%;
+	--secondary: 0 0% 96.1%;
+	--secondary-foreground: 0 0% 9%;
+	--muted: 0 0% 96.1%;
+	--muted-foreground: 0 0% 45.1%;
+	--accent: 0 0% 96.1%;
+	--accent-foreground: 0 0% 9%;
+	--destructive: 0 84.2% 60.2%;
+	--destructive-foreground: 0 0% 98%;
+	--border: 0 0% 89.8%;
+	--input: 0 0% 89.8%;
+	--ring: 0 0% 3.9%;
+	--radius: 0.5rem;
+	--paragraph-color: 0 0% 45%;
+}
+
+.dark {
+	--background: 0 0% 3.9%;
+	--container-even: 218.57, 12.5%, 6.96%;
+	--container-odd: 216, 18.07%, 9.27%;
+	--foreground: 0 0% 98%;
+	--card: 216, 18.07%, 15.27%;
+	--card-foreground: 0 0% 98%;
+	--popover: 0 0% 3.9%;
+	--popover-foreground: 0 0% 98%;
+	--primary: 0 0% 98%;
+	--primary-foreground: 0 0% 9%;
+	--secondary: 0 0% 14.9%;
+	--secondary-foreground: 0 0% 98%;
+	--muted: 0 0% 14.9%;
+	--muted-foreground: 0 0% 63.9%;
+	--accent: 0 0% 14.9%;
+	--accent-foreground: 0 0% 98%;
+	--destructive: 0 62.8% 30.6%;
+	--destructive-foreground: 0 0% 98%;
+	--border: 0 0% 14.9%;
+	--input: 0 0% 14.9%;
+	--ring: 0 0% 83.1%;
+}
+
+@theme inline {
+	--color-background: hsl(var(--background));
+	--color-container-even: hsl(var(--container-even));
+	--color-container-odd: hsl(var(--container-odd));
+	--color-foreground: hsl(var(--foreground));
+	--color-paragraph: hsl(var(--paragraph-color));
+	--color-card: hsl(var(--card));
+	--color-card-foreground: hsl(var(--card-foreground));
+	--color-popover: hsl(var(--popover));
+	--color-popover-foreground: hsl(var(--popover-foreground));
+	--color-primary: hsl(var(--primary));
+	--color-primary-foreground: hsl(var(--primary-foreground));
+	--color-secondary: hsl(var(--secondary));
+	--color-secondary-foreground: hsl(var(--secondary-foreground));
+	--color-muted: hsl(var(--muted));
+	--color-muted-foreground: hsl(var(--muted-foreground));
+	--color-accent: hsl(var(--accent));
+	--color-accent-foreground: hsl(var(--accent-foreground));
+	--color-destructive: hsl(var(--destructive));
+	--color-destructive-foreground: hsl(var(--destructive-foreground));
+	--color-border: hsl(var(--border));
+	--color-input: hsl(var(--input));
+	--color-ring: hsl(var(--ring));
+
+	--radius-lg: var(--radius);
+	--radius-md: calc(var(--radius) - 2px);
+	--radius-sm: calc(var(--radius) - 4px);
+}
+
+@theme {
+	--font-funnel: 'Funnel Sans Variable', ui-sans-serif, system-ui, sans-serif;
+	/* v3 default stack (used by `font-sans` in the project grid) */
+	--font-sans:
+		ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+		'Segoe UI Symbol', 'Noto Color Emoji';
+
+	/* v3 hex palettes (v4 defaults are oklch and drift slightly) */
+	--color-gray-50: #f9fafb;
+	--color-gray-100: #f3f4f6;
+	--color-gray-200: #e5e7eb;
+	--color-gray-300: #d1d5db;
+	--color-gray-400: #9ca3af;
+	--color-gray-500: #6b7280;
+	--color-gray-600: #4b5563;
+	--color-gray-700: #374151;
+	--color-gray-800: #1f2937;
+	--color-gray-900: #111827;
+	--color-gray-950: #030712;
+	--color-slate-50: #f8fafc;
+	--color-slate-100: #f1f5f9;
+	--color-slate-200: #e2e8f0;
+	--color-slate-300: #cbd5e1;
+	--color-slate-400: #94a3b8;
+	--color-slate-500: #64748b;
+	--color-slate-600: #475569;
+	--color-slate-700: #334155;
+	--color-slate-800: #1e293b;
+	--color-slate-900: #0f172a;
+	--color-slate-950: #020617;
+	--color-neutral-50: #fafafa;
+	--color-neutral-100: #f5f5f5;
+	--color-neutral-200: #e5e5e5;
+	--color-neutral-300: #d4d4d4;
+	--color-neutral-400: #a3a3a3;
+	--color-neutral-500: #737373;
+	--color-neutral-600: #525252;
+	--color-neutral-700: #404040;
+	--color-neutral-800: #262626;
+	--color-neutral-900: #171717;
+	--color-neutral-950: #0a0a0a;
+
+	--shadow-standard:
+		0px 2px 3px -1px rgba(0, 0, 0, 0.1), 0px 1px 0px 0px rgba(25, 28, 33, 0.02),
+		0px 0px 0px 1px rgba(25, 28, 33, 0.08);
+	--shadow-standard-xl:
+		0px 2px 3px -1px rgba(0, 0, 0, 0.1), 0px 1px 0px 0px rgba(25, 28, 33, 0.02),
+		0px 0px 0px 1px rgba(25, 28, 33, 0.08), 0 20px 13px rgb(0 0 0 / 0.03),
+		0 8px 5px rgb(0 0 0 / 0.08);
+	--shadow-standard-demune:
+		0px 2px 3px -1px rgba(0, 0, 0, 0.1), 0px 1px 0px 0px rgba(25, 28, 33, 0.02),
+		0px 0px 0px 1px rgba(25, 28, 33, 0.08), 0px 30px 90px rgba(0, 0, 0, 0.4);
+
+	--animate-shiny-text: shiny-text 8s infinite;
+	--animate-dock-slide-in: dock-slide-in 1.6s ease-out;
+	--animate-blur-fade: blur-fade var(--bf-duration, 0.4s) ease-out both;
+	--animate-word-pull-up: word-pull-up 0.5s ease-out both;
+
+	@keyframes shiny-text {
+		0%,
+		90%,
+		100% {
+			background-position: calc(-100% - var(--shiny-width)) 0;
+		}
+		30%,
+		60% {
+			background-position: calc(100% + var(--shiny-width)) 0;
+		}
+	}
+	@keyframes dock-slide-in {
+		0%,
+		50% {
+			transform: translateY(150px);
+		}
+		100% {
+			transform: translateY(0);
+		}
+	}
+	/* CSS port of v3 <BlurFade> (framer-motion) for static sections */
+	@keyframes blur-fade {
+		from {
+			opacity: 0;
+			transform: translateY(var(--bf-y, 6px));
+			filter: blur(6px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+			filter: blur(0);
+		}
+	}
+	/* CSS port of v3 <WordPullUp> */
+	@keyframes word-pull-up {
+		from {
+			opacity: 0;
+			transform: translateY(20px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+}
+
+@layer base {
+	*,
+	::after,
+	::before,
+	::backdrop,
+	::file-selector-button {
+		border-color: var(--color-border);
+	}
+
+	body {
+		@apply bg-background text-foreground font-funnel;
+	}
+
+	/* v3 preflight parity */
+	button:not(:disabled),
+	[role='button']:not(:disabled) {
+		cursor: pointer;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.animate-blur-fade,
+	.animate-word-pull-up {
+		animation: none !important;
+	}
+}
+
+.markdown-text {
+	h3 {
+		@apply text-xl font-semibold mt-4 mb-2;
+	}
+
+	h4 {
+		@apply text-lg font-semibold mt-4 mb-2;
+
+		&:first-child {
+			@apply mt-0;
+		}
+	}
+
+	h5 {
+		@apply text-base font-semibold mt-4 mb-2;
+	}
+
+	p {
+		@apply mb-4 text-justify;
+	}
+
+	strong {
+		@apply font-bold;
+	}
+
+	em {
+		@apply italic;
+	}
+
+	a {
+		@apply text-primary underline;
+	}
+
+	ul {
+		@apply list-disc ml-6;
+	}
+}

@@ -1,0 +1,23 @@
+---
+import { cn } from '@lib/utils';
+
+// CSS port of v3 <WordPullUp>: wrapper fades in, words pull up staggered by 0.2s.
+type Props = { words: string; class?: string; wordsGap?: string };
+const { words, class: className, wordsGap = '0.25rem' } = Astro.props;
+---
+
+<span
+	class={cn(
+		'font-display text-center text-4xl font-bold leading-[5rem] tracking-[-0.02em] drop-shadow-xs',
+		className,
+	)}
+>
+	{words.split(' ').map((word, i) => (
+		<span
+			class="animate-word-pull-up"
+			style={`display:inline-block;padding-right:${wordsGap};animation-delay:${i * 0.2}s`}
+		>
+			{word === '' ? <span>&nbsp;</span> : word}
+		</span>
+	))}
+</span>

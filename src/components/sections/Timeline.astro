@@ -1,0 +1,35 @@
+---
+// Experiences & Education share the same accordion timeline.
+import Container from '@/components/Container.astro';
+import ContainerTitle from '@/components/ContainerTitle.astro';
+import Accordion, { type AccordionData } from '@/components/islands/Accordion';
+import { getLocalized, imageUrl } from '@lib/content';
+import { useTranslations, type Locale } from '@/i18n/ui';
+
+type Props = {
+	index: number;
+	delay: number;
+	locale: Locale;
+	collection: 'experiences' | 'education';
+};
+const { index, delay, locale, collection } = Astro.props;
+const t = useTranslations(locale)[collection];
+
+const entries = await getLocalized(collection, locale);
+const items: AccordionData[] = await Promise.all(
+	entries.map(async ({ data, rendered }) => ({
+		...('company' in data
+			? { title: data.company, subtitle: data.jobTitle }
+			: { title: data.degree, subtitle: data.school }),
+		startDate: data.startDate,
+		endDate: data.endDate,
+		image: await imageUrl(data.image, 140),
+		html: rendered?.html ?? '',
+	})),
+);
+---
+
+<Container index={index} delay={delay} id={collection}>
+	<ContainerTitle>{t.title}</ContainerTitle>
+	<Accordion client:visible delay={delay} items={items} />
+</Container>

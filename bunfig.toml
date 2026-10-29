@@ -1,0 +1,4 @@
+[install]
+# Supply-chain hardening: refuse any package version (direct or transitive) published < 14 days ago
+minimumReleaseAge = 1209600
+exact = true

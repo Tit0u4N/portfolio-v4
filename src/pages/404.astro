@@ -1,0 +1,19 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Container from '@/components/Container.astro';
+import ContainerTitle from '@/components/ContainerTitle.astro';
+import { useTranslations } from '@/i18n/ui';
+
+const t = useTranslations('fr').notFound;
+---
+
+<BaseLayout locale="fr" title={`404 · ${t.title}`} noindex>
+	<main class="flex flex-col justify-center items-center min-h-[100vh]">
+		<Container index={0}>
+			<ContainerTitle>404 · {t.title}</ContainerTitle>
+			<a href="/" class="underline">
+				{t.back}
+			</a>
+		</Container>
+	</main>
+</BaseLayout>

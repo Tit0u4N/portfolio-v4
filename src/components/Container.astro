@@ -1,0 +1,44 @@
+---
+import { cn } from '@lib/utils';
+import { blurFadeCss } from '@lib/blurFade';
+
+type Props = {
+	rounded?: 'top' | 'bottom' | 'none';
+	index: number;
+	delay?: number;
+	class?: string;
+	id?: string;
+	label?: string;
+};
+
+const {
+	rounded = 'bottom',
+	index,
+	delay = 0,
+	class: className,
+	id,
+	label,
+} = Astro.props;
+
+const classes =
+	'shadow-standard max-w-3xl flex items-center w-full dark:border-white/[0.2] dark:border';
+const roundedClass =
+	rounded === 'top'
+		? 'rounded-t-[2rem]'
+		: rounded === 'bottom'
+			? 'rounded-b-[2rem]'
+			: '';
+const margin = index === 0 ? 'mt-0 py-12' : 'pt-12 pb-8 -mt-[2rem] max-md:px-1';
+const bg = index % 2 === 0 ? 'bg-container-odd' : 'bg-container-even';
+---
+
+<section
+	id={id}
+	aria-label={label}
+	class={cn('animate-blur-fade', classes, roundedClass, margin, bg)}
+	style={`z-index:${100 - index};${blurFadeCss({ yOffset: -140, duration: 0.6, delay })}`}
+>
+	<div class={cn('w-full px-2 sm:px-8 py-6', className)}>
+		<slot />
+	</div>
+</section>

@@ -1,0 +1,133 @@
+---
+import { getImage } from 'astro:assets';
+import profileImage from '@/assets/images/profile-image.png';
+import { getLocalized } from '@lib/content';
+import {
+	LOCALES,
+	PROFILE,
+	localePath,
+	useTranslations,
+	type Locale,
+} from '@/i18n/ui';
+
+type Props = {
+	locale: Locale;
+	title: string;
+	description: string;
+	noindex?: boolean;
+};
+const { locale, title, description, noindex = false } = Astro.props;
+const t = useTranslations(locale);
+
+const site = Astro.site!;
+const canonical = new URL(localePath(locale), site).href;
+const ogImage = await getImage({
+	src: profileImage,
+	width: 600,
+	format: 'jpg',
+	quality: 80,
+});
+const profileImageUrl = new URL(ogImage.src, site).href;
+// Social card: logo lockup (source in ../logo/final/og), photo stays the Person image.
+const ogImageUrl = new URL('/og.png', site).href;
+const ogLocale = { fr: 'fr_FR', en: 'en_US' } as const;
+
+const [projects, education, experiences] = await Promise.all([
+	getLocalized('projects', locale),
+	getLocalized('education', locale),
+	getLocalized('experiences', locale),
+]);
+
+const person = {
+	'@type': 'Person',
+	'@id': new URL('/#person', site).href,
+	name: PROFILE.name,
+	url: canonical,
+	image: profileImageUrl,
+	jobTitle: t.meta.jobTitle,
+	description,
+	worksFor: experiences[0] && {
+		'@type': 'Organization',
+		name: experiences[0].data.company,
+	},
+	alumniOf: [...new Set(education.map((e) => e.data.school))].map((name) => ({
+		'@type': 'CollegeOrUniversity',
+		name,
+	})),
+	sameAs: [PROFILE.githubLink, PROFILE.linkdinLink],
+};
+
+const jsonLd = {
+	'@context': 'https://schema.org',
+	'@graph': [
+		{
+			'@type': 'ProfilePage',
+			'@id': canonical,
+			url: canonical,
+			name: title,
+			inLanguage: locale,
+			mainEntity: { '@id': person['@id'] },
+		},
+		person,
+		{
+			'@type': 'ItemList',
+			name: t.projects.title,
+			itemListElement: projects.map((p, i) => ({
+				'@type': 'ListItem',
+				position: i + 1,
+				item: {
+					'@type': 'CreativeWork',
+					name: p.data.title,
+					description: p.data.shortDescription,
+					author: { '@id': person['@id'] },
+					...(p.data.linkDemo || p.data.linkGithub
+						? { url: p.data.linkDemo ?? p.data.linkGithub }
+						: {}),
+				},
+			})),
+		},
+	],
+};
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<meta name="author" content={PROFILE.name} />
+<link rel="canonical" href={canonical} />
+{noindex && <meta name="robots" content="noindex" />}
+{!noindex &&
+	LOCALES.map((l) => (
+		<link
+			rel="alternate"
+			hreflang={l}
+			href={new URL(localePath(l), site).href}
+		/>
+	))}
+{!noindex && (
+	<link rel="alternate" hreflang="x-default" href={new URL('/', site).href} />
+)}
+
+<meta property="og:type" content="profile" />
+<meta property="og:site_name" content={PROFILE.name} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImageUrl} />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={PROFILE.name} />
+<meta property="og:locale" content={ogLocale[locale]} />
+{LOCALES.filter((l) => l !== locale).map((l) => (
+	<meta property="og:locale:alternate" content={ogLocale[l]} />
+))}
+<meta property="profile:first_name" content="Titouan" />
+<meta property="profile:last_name" content="Lacombe--Fabre" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImageUrl} />
+
+{!noindex && (
+	<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+)}
