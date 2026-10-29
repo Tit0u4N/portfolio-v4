@@ -2,7 +2,8 @@
 order: 0
 title: "Néocivis"
 shortDescription: "Civic-tech platform connecting citizens and city hall"
-image: "../../../assets/images/projects/informiento.png"
+image: "../../../assets/images/projects/neocivis.png"
+linkGithub: "https://github.com/Tit0u4N/neocivis.git"
 techs: ["TYPESCRIPT","REACT_TECH","NEXTJS","TAILWINDCSS","NODEJS","GIT"]
 ---
 
