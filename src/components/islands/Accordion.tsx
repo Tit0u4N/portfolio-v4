@@ -103,7 +103,7 @@ function Item({ index, delay, idOpen, handleOpen, data }: ItemProps) {
 									)}
 								/>
 							</span>
-							<span className={'text-xs font-normal text-paragraph -mt-1'}>
+							<span className={'text-sm font-normal text-paragraph'}>
 								{data.subtitle}
 							</span>
 						</span>
