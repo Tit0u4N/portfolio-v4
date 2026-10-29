@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState, type RefObject } from 'react';
-import { delay as doDelay, frame } from 'motion/react';
+import { delay as doDelay } from 'motion/react';
 import { cn, hasParentWithAttribute } from '@lib/utils';
 import type { TechnologyData } from '@/data/technologies';
 import ProjectItem from './ProjectGridItem';
@@ -52,17 +52,6 @@ export default function ProjectGrid({
 			}
 			if (projectToOpen) {
 				setZClasses((z) => ({ ...z, [projectToOpen.id]: 'z-50' }));
-				// postRender: motion measures keyframes (and restores scroll) earlier in the same frame,
-				// which would cancel a smooth scroll started before it
-				doDelay(() => {
-					frame.postRender(() => {
-						const top =
-							(window.scrollY ?? 0) +
-							(projectToOpen.ref.current?.getBoundingClientRect().top ?? 0) -
-							350;
-						scrollTo({ top, behavior: 'smooth' });
-					});
-				}, 0.4);
 			}
 			setProjectOpen(projectToOpen);
 		},

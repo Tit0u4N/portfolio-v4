@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { motion } from 'motion/react';
 import { IconBrandGithub, IconPlanet } from '@tabler/icons-react';
 import { cn } from '@lib/utils';
@@ -31,26 +31,36 @@ export default function ProjectItem({
 }: ProjectItemProps) {
 	const isOpen = index === idOpen;
 	const ref = useRef<HTMLDivElement>(null);
-	let width = '100%';
-	let offsetX = 0;
+	const articleRef = useRef<HTMLElement>(null);
+	// Open geometry, measured from the untransformed <article> when opening
+	const [geo, setGeo] = useState({ width: '100%', height: '38rem', x: 0, y: 0 });
 	let imageHeight = 190;
 
 	const openModal = () => {
-		if (!isOpen) handleProjectOpen({ id: index, ref });
+		if (isOpen) return;
+		const article = articleRef.current;
+		if (article) {
+			const screenWidth = window.innerWidth;
+			const screenHeight = window.innerHeight;
+			const openWidth = screenWidth > 740 ? 800 : screenWidth * 0.98;
+			const openHeight = Math.min(608, screenHeight * 0.9);
+			const rect = article.getBoundingClientRect();
+			setGeo({
+				width: `${openWidth}px`,
+				height: `${openHeight}px`,
+				x: screenWidth / 2 - openWidth / 2 - rect.left,
+				y: screenHeight / 2 - openHeight / 2 - rect.top,
+			});
+		}
+		handleProjectOpen({ id: index, ref });
 	};
 
 	const closeModal = () => {
 		if (isOpen) handleProjectOpen(null);
 	};
 
-	// Same geometry as v3: computed from the live DOM once mounted
 	if (ref.current) {
 		const screenWidth = window.innerWidth;
-		const openWidth = screenWidth > 740 ? 800 : screenWidth * 0.98;
-		width = `${openWidth}px`;
-		const rect = ref.current.getBoundingClientRect();
-		offsetX = screenWidth / 2 - openWidth / 2 - rect.left;
-
 		const imageHeightTempOpen = screenWidth > 740 ? 370 : 230;
 		const imageHeightTempClose = screenWidth > 740 ? 190 : 110;
 		imageHeight = isOpen ? imageHeightTempOpen : imageHeightTempClose;
@@ -58,6 +68,7 @@ export default function ProjectItem({
 
 	return (
 		<article
+			ref={articleRef}
 			style={blurFadeStyle({ yOffset: -40, delay })}
 			className={cn(
 				'animate-blur-fade relative row-span-1 rounded-xl group/bento hover:shadow-standard-xl shadow-standard dark:shadow-none dark:border-white/[0.2] bg-card border border-transparent max-h-[190px] sm:max-h-[290px]',
@@ -73,10 +84,10 @@ export default function ProjectItem({
 					isOpen ? 'shadow-standard-demune' : '',
 				)}
 				animate={{
-					x: isOpen ? offsetX : 0,
-					y: isOpen ? '-15%' : 0,
-					width: isOpen ? width : '100%',
-					height: isOpen ? '38rem' : '100%',
+					x: isOpen ? geo.x : 0,
+					y: isOpen ? geo.y : 0,
+					width: isOpen ? geo.width : '100%',
+					height: isOpen ? geo.height : '100%',
 				}}
 				transition={{ type: 'spring', duration: 0.6 }}
 			>
