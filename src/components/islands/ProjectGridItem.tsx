@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'motion/react';
 import { IconBrandGithub, IconPlanet } from '@tabler/icons-react';
 import { cn } from '@lib/utils';
@@ -32,8 +32,16 @@ export default function ProjectItem({
 	const isOpen = index === idOpen;
 	const ref = useRef<HTMLDivElement>(null);
 	const articleRef = useRef<HTMLElement>(null);
+	const closeRef = useRef<HTMLButtonElement>(null);
+	const titleRef = useRef<HTMLButtonElement>(null);
+	const wasOpen = useRef(false);
 	// Open geometry, measured from the untransformed <article> when opening
-	const [geo, setGeo] = useState({ width: '100%', height: '38rem', x: 0, y: 0 });
+	const [geo, setGeo] = useState({
+		width: '100%',
+		height: '38rem',
+		x: 0,
+		y: 0,
+	});
 	let imageHeight = 190;
 
 	const openModal = () => {
@@ -59,6 +67,13 @@ export default function ProjectItem({
 		if (isOpen) handleProjectOpen(null);
 	};
 
+	// Move focus into the modal on open, give it back to the card title on close
+	useEffect(() => {
+		if (isOpen) closeRef.current?.focus({ preventScroll: true });
+		else if (wasOpen.current) titleRef.current?.focus({ preventScroll: true });
+		wasOpen.current = isOpen;
+	}, [isOpen]);
+
 	if (ref.current) {
 		const screenWidth = window.innerWidth;
 		const imageHeightTempOpen = screenWidth > 740 ? 370 : 230;
@@ -79,6 +94,9 @@ export default function ProjectItem({
 			<motion.div
 				ref={ref}
 				data-project-id={index}
+				role={isOpen ? 'dialog' : undefined}
+				aria-modal={isOpen || undefined}
+				aria-label={isOpen ? project.title : undefined}
 				className={cn(
 					'rounded-xl bg-card',
 					isOpen ? 'shadow-standard-demune' : '',
@@ -110,6 +128,7 @@ export default function ProjectItem({
 							className={'h-0 w-full flex justify-end pe-2 sm:mt-0 mt-2'}
 						>
 							<button
+								ref={closeRef}
 								onClick={closeModal}
 								aria-label={labels.close}
 								className={
@@ -167,6 +186,7 @@ export default function ProjectItem({
 											)}
 										>
 											<button
+												ref={titleRef}
 												type="button"
 												onClick={openModal}
 												aria-expanded={isOpen}
@@ -187,31 +207,33 @@ export default function ProjectItem({
 								appearsWhen={isOpen}
 								className={'flex sm:flex-col sm:w-1/3 sm:gap-4'}
 							>
-								<div className={'flex flex-col w-1/3 sm:w-full gap-2'}>
-									<h4 className={'text-xl mb-2'}>{labels.links} :</h4>
-									{project.linkGithub && (
-										<a
-											className={'ps-4 underline cursor-pointer'}
-											target={'_blank'}
-											rel="noopener noreferrer"
-											href={project.linkGithub}
-										>
-											<IconPlanet className={'inline'} />
-											{labels.linkGit}
-										</a>
-									)}
-									{project.linkDemo && (
-										<a
-											className={'ps-4 underline cursor-pointer'}
-											target={'_blank'}
-											rel="noopener noreferrer"
-											href={project.linkDemo}
-										>
-											<IconBrandGithub className={'inline'} />
-											{labels.linkDemo}
-										</a>
-									)}
-								</div>
+								{(project.linkGithub || project.linkDemo) && (
+									<div className={'flex flex-col w-1/3 sm:w-full gap-2'}>
+										<h4 className={'text-xl mb-2'}>{labels.links} :</h4>
+										{project.linkGithub && (
+											<a
+												className={'ps-4 underline cursor-pointer'}
+												target={'_blank'}
+												rel="noopener noreferrer"
+												href={project.linkGithub}
+											>
+												<IconBrandGithub className={'inline'} />
+												{labels.linkGit}
+											</a>
+										)}
+										{project.linkDemo && (
+											<a
+												className={'ps-4 underline cursor-pointer'}
+												target={'_blank'}
+												rel="noopener noreferrer"
+												href={project.linkDemo}
+											>
+												<IconPlanet className={'inline'} />
+												{labels.linkDemo}
+											</a>
+										)}
+									</div>
+								)}
 								<div className={'flex flex-col'}>
 									<h4 className="text-xl mb-2">{labels.technologies} :</h4>
 									<div className={'flex flex-wrap gap-2'}>

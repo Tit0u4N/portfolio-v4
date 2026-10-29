@@ -44,12 +44,16 @@ const items = [
 		icon: IconBrandLinkedin,
 		brandName: 'LinkedIn',
 	},
-	{
-		name: PROFILE.mail,
-		link: `mailto:${PROFILE.mail}`,
-		icon: IconMail,
-		brandName: 'Email',
-	},
+	...(PROFILE.mail
+		? [
+				{
+					name: PROFILE.mail,
+					link: `mailto:${PROFILE.mail}`,
+					icon: IconMail,
+					brandName: 'Email',
+				},
+			]
+		: []),
 ];
 
 export default function Nav({ locale, alternateHref }: NavProps) {
