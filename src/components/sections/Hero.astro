@@ -26,7 +26,7 @@ const t = useTranslations(locale).hero;
 					words={t.title}
 				/>
 			</h1>
-			<p class="text-xl font-thin text-paragraph">{t.callOut}</p>
+			<p class="text-xl font-light text-paragraph">{t.callOut}</p>
 		</div>
 		<div class="min-w-[150px] max-md:scale-125 max-md:-translate-y-3">
 			<Image
@@ -41,7 +41,9 @@ const t = useTranslations(locale).hero;
 			<div class="relative size-0 -translate-y-10 translate-x-2 rotate-6">
 				<div class="w-[140px] p-1 h-fit bg-white shadow-standard rounded-md hover:bg-slate-50 dark:bg-black dark:shadow-none dark:hover:bg-black">
 					<AnimatedShinyText class="text-center">
-						<span>{PROFILE.name}</span>
+						<span class="whitespace-pre-line">
+							{PROFILE.name.replace(' ', '\n')}
+						</span>
 					</AnimatedShinyText>
 				</div>
 			</div>
@@ -51,6 +53,6 @@ const t = useTranslations(locale).hero;
 		<ContainerTitle class="md:mt-20 mt-5 text-xl mb-4">
 			{t.about}
 		</ContainerTitle>
-		<p class="font-thin text-paragraph text-justify">{t.description}</p>
+		<p class="font-light text-paragraph max-w-prose">{t.description}</p>
 	</div>
 </Container>

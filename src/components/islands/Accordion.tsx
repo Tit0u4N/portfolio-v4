@@ -82,35 +82,40 @@ function Item({ index, delay, idOpen, handleOpen, data }: ItemProps) {
 					'ms-[31px] p-2 ps-10 pb-14 h-fit min-h-28 border-s [&>:not([hidden])~:not([hidden])]:mt-2 z-8'
 				}
 			>
-				<div
-					className={'w-full flex justify-between items-center'}
-					onClick={() => handleOpen(index)}
-				>
-					<div className={'group cursor-pointer'}>
-						<div className={'flex items-center gap-1 '}>
-							<h3 className={'font-medium group-hover:underline'}>
-								<button
-									type="button"
-									aria-expanded={isOpen}
-									className={'text-left'}
-								>
-									{data.title}
-								</button>
-							</h3>
-							<ChevronRight
-								size={20}
-								className={cn(
-									'transition duration-500',
-									isOpen && 'translate-x-0 opacity-100 rotate-90',
-								)}
-							/>
-						</div>
-						<p className={'text-xs text-paragraph -mt-1'}>{data.subtitle}</p>
-					</div>
-					<div className={'text-paragraph'}>
-						{data.startDate} - {data.endDate}
-					</div>
-				</div>
+				{/* Whole row is the toggle so title, subtitle and dates are all clickable */}
+				<h3 className={'font-medium'}>
+					<button
+						type="button"
+						aria-expanded={isOpen}
+						onClick={() => handleOpen(index)}
+						className={
+							'group w-full flex flex-col items-start gap-1 sm:flex-row sm:justify-between sm:items-center sm:gap-4 text-left'
+						}
+					>
+						<span className={'flex flex-col'}>
+							<span className={'flex items-center gap-1'}>
+								<span className={'group-hover:underline'}>{data.title}</span>
+								<ChevronRight
+									size={20}
+									className={cn(
+										'shrink-0 transition duration-500',
+										isOpen && 'translate-x-0 opacity-100 rotate-90',
+									)}
+								/>
+							</span>
+							<span className={'text-xs font-normal text-paragraph -mt-1'}>
+								{data.subtitle}
+							</span>
+						</span>
+						<span
+							className={
+								'text-paragraph font-normal max-sm:text-sm sm:shrink-0'
+							}
+						>
+							{data.startDate} - {data.endDate}
+						</span>
+					</button>
+				</h3>
 				<AnimatePresence>
 					{isOpen && (
 						<motion.div
