@@ -4,7 +4,8 @@ export const DEFAULT_LOCALE: Locale = 'fr';
 
 export const PROFILE = {
 	name: 'Titouan Lacombe--Fabre',
-	mail: 'mail@mail',
+	// No public address yet: mail links are hidden while this is null
+	mail: null as string | null,
 	github: 'Tit0u4n',
 	githubLink: 'https://github.com/Tit0u4N',
 	linkdin: 'Titouan Lacombe--Fabre',
@@ -37,7 +38,7 @@ const fr = {
 		technologies: 'Technologies',
 		close: 'Fermer',
 	},
-	other: { title: 'CV & Contact', cvFr: 'CV Français', cvEn: 'CV Anglais' },
+	other: { title: 'Contact', cvFr: 'CV Français', cvEn: 'CV Anglais' },
 	nav: {
 		switchTo: 'English',
 		current: 'Français',
@@ -76,7 +77,7 @@ const en: Dict = {
 		close: 'Close',
 	},
 	other: {
-		title: 'Resume & Contact',
+		title: 'Contact',
 		cvFr: 'French Resume',
 		cvEn: 'English Resume',
 	},

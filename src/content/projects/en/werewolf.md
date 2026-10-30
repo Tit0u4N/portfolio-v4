@@ -2,7 +2,8 @@
 order: 1
 title: "Werewolf"
 shortDescription: "Real-time multiplayer Werewolf game on microservices"
-image: "../../../assets/images/projects/wcStudio.png"
+image: "../../../assets/images/projects/werewolf.jpg"
+linkGithub: "https://github.com/Tit0u4N/Werewolf-Microservices.git"
 techs: ["JAVA","SPRINGBOOT","REACT_TECH","ANGULAR","DOCKER","MONGO","PGSQL","GIT"]
 ---
 

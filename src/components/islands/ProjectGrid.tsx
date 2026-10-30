@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState, type RefObject } from 'react';
-import { delay as doDelay, frame } from 'motion/react';
+import { delay as doDelay } from 'motion/react';
 import { cn, hasParentWithAttribute } from '@lib/utils';
 import type { TechnologyData } from '@/data/technologies';
 import ProjectItem from './ProjectGridItem';
@@ -52,17 +52,6 @@ export default function ProjectGrid({
 			}
 			if (projectToOpen) {
 				setZClasses((z) => ({ ...z, [projectToOpen.id]: 'z-50' }));
-				// postRender: motion measures keyframes (and restores scroll) earlier in the same frame,
-				// which would cancel a smooth scroll started before it
-				doDelay(() => {
-					frame.postRender(() => {
-						const top =
-							(window.scrollY ?? 0) +
-							(projectToOpen.ref.current?.getBoundingClientRect().top ?? 0) -
-							350;
-						scrollTo({ top, behavior: 'smooth' });
-					});
-				}, 0.4);
 			}
 			setProjectOpen(projectToOpen);
 		},
@@ -81,6 +70,7 @@ export default function ProjectGrid({
 		};
 		const onKey = (event: KeyboardEvent) => {
 			if (event.key === 'Escape') handleProjectOpen(null);
+			if (event.key === 'Tab') trapFocus(event, projectOpen.ref.current);
 		};
 		document.addEventListener('mousedown', listener);
 		document.addEventListener('touchstart', listener);
@@ -113,4 +103,29 @@ export default function ProjectGrid({
 			))}
 		</div>
 	);
+}
+
+const FOCUSABLE =
+	'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+// Keep Tab / Shift+Tab cycling inside the open project
+function trapFocus(event: KeyboardEvent, container: HTMLElement | null) {
+	if (!container) return;
+	const focusable = [
+		...container.querySelectorAll<HTMLElement>(FOCUSABLE),
+	].filter((el) => !el.closest('[hidden]'));
+	if (!focusable.length) return;
+	const first = focusable[0];
+	const last = focusable[focusable.length - 1];
+	const active = document.activeElement;
+	if (event.shiftKey && (active === first || !container.contains(active))) {
+		event.preventDefault();
+		last.focus();
+	} else if (
+		!event.shiftKey &&
+		(active === last || !container.contains(active))
+	) {
+		event.preventDefault();
+		first.focus();
+	}
 }

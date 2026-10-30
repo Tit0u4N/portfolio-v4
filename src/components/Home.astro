@@ -12,7 +12,7 @@ const { locale } = Astro.props;
 const delay = (index: number) => index * 0.3;
 ---
 
-<main class="flex flex-col justify-end items-center min-h-[100vh]">
+<main class="flex flex-col justify-end items-center min-h-[100vh] pb-28">
 	<Hero index={0} delay={delay(0)} locale={locale} />
 	<Timeline
 		index={1}

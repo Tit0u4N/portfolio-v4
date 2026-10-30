@@ -27,8 +27,7 @@ const projects: ProjectData[] = await Promise.all(
 ---
 
 <Container index={index} delay={delay} class="sm:px-4" id="projects">
-	<!-- v3 parity: title was hardcoded in English -->
-	<ContainerTitle class="px-2 sm:px-4">Projects</ContainerTitle>
+	<ContainerTitle class="px-2 sm:px-4">{t.title}</ContainerTitle>
 	<ProjectGrid
 		client:visible
 		delay={delay}

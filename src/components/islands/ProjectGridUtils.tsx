@@ -67,7 +67,7 @@ export function ProjectContent({
 			<ProjectContentAnimatePresence
 				appearsWhen={isOpen}
 				className={
-					'markdown-text text-paragraph font-thin text-base leading-6 tracking-wider li [&>:not([hidden])~:not([hidden])]:mt-2 mx-2 my-6'
+					'markdown-text text-paragraph font-light text-base leading-6 tracking-wider li [&>:not([hidden])~:not([hidden])]:mt-2 mx-2 my-6'
 				}
 				initial={{ opacity: 0, y: 60 }}
 				animate={{ opacity: 1, y: 0 }}

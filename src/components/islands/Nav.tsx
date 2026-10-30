@@ -44,12 +44,16 @@ const items = [
 		icon: IconBrandLinkedin,
 		brandName: 'LinkedIn',
 	},
-	{
-		name: PROFILE.mail,
-		link: `mailto:${PROFILE.mail}`,
-		icon: IconMail,
-		brandName: 'Email',
-	},
+	...(PROFILE.mail
+		? [
+				{
+					name: PROFILE.mail,
+					link: `mailto:${PROFILE.mail}`,
+					icon: IconMail,
+					brandName: 'Email',
+				},
+			]
+		: []),
 ];
 
 export default function Nav({ locale, alternateHref }: NavProps) {
@@ -160,15 +164,18 @@ export default function Nav({ locale, alternateHref }: NavProps) {
 									type="button"
 									aria-label={themeLabel}
 									className={
-										'group-hover:scale-[1.3] transition hover:rotate-45 flex flex-col items-center justify-between'
+										'group-hover:scale-[1.3] transition flex flex-col items-center justify-between'
 									}
 									onClick={toggleTheme}
 								>
-									{theme === 'dark' ? (
-										<IconMoon size={24} />
-									) : (
-										<IconSun size={24} />
-									)}
+									{/* Only the icon rotates, not the mobile label */}
+									<span className={'transition group-hover:rotate-45'}>
+										{theme === 'dark' ? (
+											<IconMoon size={24} />
+										) : (
+											<IconSun size={24} />
+										)}
+									</span>
 									<p className={'text-xs md:hidden mt-1'}>{themeLabel}</p>
 								</button>
 							</TooltipTrigger>

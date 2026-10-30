@@ -10,7 +10,9 @@ const t = useTranslations(locale).other;
 
 const links = [
 	{ href: PROFILE.githubLink, label: PROFILE.github, icon: 'github' },
-	{ href: `mailto:${PROFILE.mail}`, label: PROFILE.mail, icon: 'mail' },
+	...(PROFILE.mail
+		? [{ href: `mailto:${PROFILE.mail}`, label: PROFILE.mail, icon: 'mail' }]
+		: []),
 	{ href: PROFILE.linkdinLink, label: PROFILE.linkdin, icon: 'linkedin' },
 ] as const;
 ---
