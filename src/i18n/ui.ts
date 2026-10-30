@@ -14,13 +14,12 @@ export const PROFILE = {
 
 const fr = {
 	meta: {
-		title: 'Bienvenue sur mon portfolio 👋',
+		title: 'Titouan Lacombe--Fabre, ingénieur fullstack',
 		description:
-			"Alternant en développement fullstack, je suis passionné par le développement web et l'architecture de solution informatique.",
+			"Ingénieur fullstack, à l'interface entre technique et fonctionnel. Je conçois des applications web modernes, de la faisabilité à la mise en production.",
 		jobTitle: 'Développeur Fullstack',
 	},
 	hero: {
-		title: 'Bienvenue sur mon portfolio 👋',
 		callOut:
 			"Ingénieur fullstack, à l'interface entre technique et fonctionnel. Je conçois des applications web modernes, de la faisabilité à la mise en production.",
 		about: 'À propos',
@@ -40,6 +39,7 @@ const fr = {
 	},
 	other: { title: 'Contact', cvFr: 'CV Français', cvEn: 'CV Anglais' },
 	nav: {
+		home: 'Accueil',
 		switchTo: 'English',
 		current: 'Français',
 		light: 'Light',
@@ -52,13 +52,12 @@ type Dict = typeof fr;
 
 const en: Dict = {
 	meta: {
-		title: 'Welcome to my portfolio 👋',
+		title: 'Titouan Lacombe--Fabre, fullstack engineer',
 		description:
-			'Full-stack development apprentice, I am passionate about web development and IT solution architecture.',
+			'Fullstack engineer working at the interface between technical and functional. I design modern web applications, from feasibility to production.',
 		jobTitle: 'Fullstack Developer',
 	},
 	hero: {
-		title: 'Welcome to my portfolio 👋',
 		callOut:
 			'Fullstack engineer working at the interface between technical and functional. I design modern web applications, from feasibility to production.',
 		about: 'About',
@@ -82,6 +81,7 @@ const en: Dict = {
 		cvEn: 'English Resume',
 	},
 	nav: {
+		home: 'Home',
 		switchTo: 'Français',
 		current: 'English',
 		light: 'Light',

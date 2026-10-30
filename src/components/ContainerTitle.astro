@@ -1,13 +1,13 @@
 ---
 import { cn } from '@lib/utils';
 
-type Props = { class?: string; id?: string };
-const { class: className, id } = Astro.props;
+type Props = { class?: string; id?: string; cursor?: boolean };
+const { class: className, id, cursor = true } = Astro.props;
 ---
 
 <h2
 	id={id}
 	class={cn('text-4xl text-neutral-900 dark:text-neutral-100 mb-8', className)}
 >
-	<slot />
+	<slot />{cursor && <span class="title-cursor" aria-hidden="true" />}
 </h2>

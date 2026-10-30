@@ -1,11 +1,9 @@
 ---
 import { cn } from '@lib/utils';
-import { blurFadeCss } from '@lib/blurFade';
 
 type Props = {
 	rounded?: 'top' | 'bottom' | 'none';
 	index: number;
-	delay?: number;
 	class?: string;
 	id?: string;
 	label?: string;
@@ -14,7 +12,6 @@ type Props = {
 const {
 	rounded = 'bottom',
 	index,
-	delay = 0,
 	class: className,
 	id,
 	label,
@@ -35,8 +32,8 @@ const bg = index % 2 === 0 ? 'bg-container-odd' : 'bg-container-even';
 <section
 	id={id}
 	aria-label={label}
-	class={cn('animate-blur-fade', classes, roundedClass, margin, bg)}
-	style={`z-index:${100 - index};${blurFadeCss({ yOffset: -140, duration: 0.6, delay })}`}
+	class={cn(classes, roundedClass, margin, bg)}
+	style={`z-index:${100 - index}`}
 >
 	<div class={cn('w-full px-2 sm:px-8 py-6', className)}>
 		<slot />

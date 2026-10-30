@@ -86,7 +86,7 @@ export default function ProjectItem({
 			ref={articleRef}
 			style={blurFadeStyle({ yOffset: -40, delay })}
 			className={cn(
-				'animate-blur-fade relative row-span-1 rounded-xl group/bento hover:shadow-standard-xl shadow-standard dark:shadow-none dark:border-white/[0.2] bg-card border border-transparent max-h-[190px] sm:max-h-[290px]',
+				'animate-blur-fade relative row-span-1 rounded-xl group/bento hover:shadow-standard-xl shadow-standard dark:shadow-none dark:border-white/[0.2] bg-card border border-transparent max-h-[210px] sm:max-h-[290px]',
 				index === 3 || index === 6 ? 'md:col-span-2' : '',
 				zClass,
 			)}
@@ -197,7 +197,7 @@ export default function ProjectItem({
 										</h3>
 									</div>
 									<ProjectContentAnimatePresence appearsWhen={!isOpen}>
-										<p className="font-sans font-normal text-xs text-paragraph	">
+										<p className="font-sans font-normal text-xs text-paragraph line-clamp-2">
 											{project.shortDescription}
 										</p>
 									</ProjectContentAnimatePresence>

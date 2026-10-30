@@ -19,8 +19,3 @@ export function blurFadeStyle({
 		animationDelay: `${0.04 + delay}s`,
 	} as CSSProperties;
 }
-
-/** Same as blurFadeStyle, serialized for Astro `style` attributes. */
-export function blurFadeCss(opts: Parameters<typeof blurFadeStyle>[0]) {
-	return `--bf-y:${opts.yOffset ?? 6}px;--bf-duration:${opts.duration ?? 0.4}s;animation-delay:${0.04 + (opts.delay ?? 0)}s`;
-}

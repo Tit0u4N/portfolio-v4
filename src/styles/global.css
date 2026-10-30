@@ -55,6 +55,7 @@
 	--border: 0 0% 14.9%;
 	--input: 0 0% 14.9%;
 	--ring: 0 0% 83.1%;
+	--paragraph-color: 0 0% 63%;
 }
 
 @theme inline {
@@ -139,22 +140,9 @@
 		0px 2px 3px -1px rgba(0, 0, 0, 0.1), 0px 1px 0px 0px rgba(25, 28, 33, 0.02),
 		0px 0px 0px 1px rgba(25, 28, 33, 0.08), 0px 30px 90px rgba(0, 0, 0, 0.4);
 
-	--animate-shiny-text: shiny-text 8s infinite;
-	--animate-dock-slide-in: dock-slide-in 1.6s ease-out;
+	--animate-dock-slide-in: dock-slide-in 1.2s ease-out;
 	--animate-blur-fade: blur-fade var(--bf-duration, 0.4s) ease-out both;
-	--animate-word-pull-up: word-pull-up 0.5s ease-out both;
 
-	@keyframes shiny-text {
-		0%,
-		90%,
-		100% {
-			background-position: calc(-100% - var(--shiny-width)) 0;
-		}
-		30%,
-		60% {
-			background-position: calc(100% + var(--shiny-width)) 0;
-		}
-	}
 	@keyframes dock-slide-in {
 		0%,
 		50% {
@@ -175,17 +163,6 @@
 			opacity: 1;
 			transform: translateY(0);
 			filter: blur(0);
-		}
-	}
-	/* CSS port of v3 <WordPullUp> */
-	@keyframes word-pull-up {
-		from {
-			opacity: 0;
-			transform: translateY(20px);
-		}
-		to {
-			opacity: 1;
-			transform: translateY(0);
 		}
 	}
 }
@@ -217,8 +194,195 @@
 
 @media (prefers-reduced-motion: reduce) {
 	.animate-blur-fade,
-	.animate-word-pull-up {
+	.animate-dock-slide-in {
 		animation: none !important;
+	}
+}
+
+/* The logo's cursor at text scale: 52:24 with 4u corners, sitting on the baseline */
+.title-cursor {
+	display: inline-block;
+	width: 0.4em;
+	height: 0.185em;
+	margin-inline-start: 0.14em;
+	border-radius: calc(0.185em * 4 / 24);
+	background: currentColor;
+}
+
+/* Everything here is a bonus: without it the logo and cursors are simply static */
+@media (prefers-reduced-motion: no-preference) {
+	html {
+		scroll-behavior: smooth;
+	}
+
+	/* The letters write themselves fast, then the cursor slides out of the L's foot.
+	   Its start pose (-126px, 0.27) tucks it inside the foot, which has the same height. */
+	.logo-animated path,
+	.logo-loop.is-looping path {
+		stroke-dasharray: 1 1;
+	}
+	.logo-cursor {
+		transform-box: fill-box;
+		transform-origin: right center;
+	}
+	.logo-animated path {
+		animation: logo-trace var(--trace-duration) var(--trace-delay)
+			cubic-bezier(0.16, 1, 0.3, 1) both;
+	}
+	.logo-animated .logo-cursor {
+		animation: var(--cursor-in);
+	}
+
+	/* Only the current section's cursor blinks, and it rests after 4.8s (WCAG 2.2.2) */
+	section[data-active] .title-cursor {
+		animation: cursor-blink 1.2s linear 4;
+	}
+	section[data-active] .logo-animated .logo-cursor {
+		animation:
+			var(--cursor-in),
+			cursor-blink 1.2s 1.2s linear 4;
+	}
+
+	/* Hover loop: the cursor retracts into the L, the strokes erase and rewrite, it comes back out.
+	   Entry animations stay listed so that ending the loop does not replay them. */
+	.logo-loop path:nth-child(2) {
+		--loop-delay: 0.08s;
+	}
+	.logo-loop path:nth-child(3) {
+		--loop-delay: 0.16s;
+	}
+	.logo-loop path:nth-child(4) {
+		--loop-delay: 0.24s;
+	}
+	.logo-loop.is-looping path {
+		animation: var(--stroke-loop);
+	}
+	.logo-loop.is-looping .logo-cursor {
+		animation: var(--cursor-loop);
+	}
+	.logo-animated.is-looping path {
+		animation:
+			logo-trace var(--trace-duration) var(--trace-delay)
+				cubic-bezier(0.16, 1, 0.3, 1) both,
+			var(--stroke-loop);
+	}
+	.logo-animated.is-looping .logo-cursor {
+		animation:
+			var(--cursor-in),
+			var(--cursor-loop);
+	}
+	section[data-active] .logo-animated.is-looping .logo-cursor {
+		animation:
+			var(--cursor-in),
+			cursor-blink 1.2s 1.2s linear 4,
+			var(--cursor-loop);
+	}
+
+	:root {
+		--cursor-in: logo-cursor-in 0.5s 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+		--stroke-loop: logo-loop-stroke 2.4s var(--loop-delay, 0s) infinite;
+		--cursor-loop: logo-loop-cursor 2.4s 0.3s infinite;
+	}
+
+	@keyframes logo-loop-stroke {
+		0%,
+		15% {
+			stroke-dashoffset: 0;
+			opacity: 1;
+			animation-timing-function: cubic-bezier(0.7, 0, 0.84, 0);
+		}
+		35% {
+			stroke-dashoffset: -1;
+			opacity: 1;
+		}
+		35.01% {
+			stroke-dashoffset: 1;
+			opacity: 0;
+			animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+		}
+		36% {
+			opacity: 1;
+		}
+		60%,
+		100% {
+			stroke-dashoffset: 0;
+			opacity: 1;
+		}
+	}
+	@keyframes logo-loop-cursor {
+		0%,
+		4% {
+			transform: none;
+			opacity: 1;
+			animation-timing-function: cubic-bezier(0.7, 0, 0.84, 0);
+		}
+		/* Hidden from here: the L's foot is about to be erased */
+		22% {
+			transform: translateX(-126px) scaleX(0.27);
+			opacity: 1;
+		}
+		22.01%,
+		53.99% {
+			transform: translateX(-126px) scaleX(0.27);
+			opacity: 0;
+		}
+		/* Out again once the letters are rewritten */
+		54% {
+			transform: translateX(-126px) scaleX(0.27);
+			opacity: 1;
+			animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+		}
+		72%,
+		100% {
+			transform: none;
+		}
+		82%,
+		90.99%,
+		100% {
+			opacity: 1;
+		}
+		82.01%,
+		90.98% {
+			opacity: 0;
+		}
+	}
+
+	@keyframes logo-trace {
+		/* Round caps leave a dot at zero length: stay hidden until the stroke starts */
+		from {
+			stroke-dashoffset: 1;
+			opacity: 0;
+		}
+		1% {
+			opacity: 1;
+		}
+		to {
+			stroke-dashoffset: 0;
+			opacity: 1;
+		}
+	}
+	@keyframes logo-cursor-in {
+		from {
+			opacity: 0;
+			transform: translateX(-126px) scaleX(0.27);
+		}
+		1% {
+			opacity: 1;
+		}
+		to {
+			opacity: 1;
+			transform: none;
+		}
+	}
+	@keyframes cursor-blink {
+		0%,
+		49.9% {
+			opacity: 1;
+		}
+		50%,
+		100% {
+			opacity: 0;
+		}
 	}
 }
 

@@ -8,20 +8,13 @@ import type { Locale } from '@/i18n/ui';
 
 type Props = { locale: Locale };
 const { locale } = Astro.props;
-// Same order and stagger as v3 (index * 0.3s)
-const delay = (index: number) => index * 0.3;
 ---
 
 <main class="flex flex-col justify-end items-center min-h-[100vh] pb-28">
-	<Hero index={0} delay={delay(0)} locale={locale} />
-	<Timeline
-		index={1}
-		delay={delay(1)}
-		locale={locale}
-		collection="experiences"
-	/>
-	<Timeline index={2} delay={delay(2)} locale={locale} collection="education" />
-	<Projects index={3} delay={delay(3)} locale={locale} />
-	<Skills index={4} delay={delay(4)} locale={locale} />
-	<Other index={5} delay={delay(5)} locale={locale} />
+	<Hero index={0} locale={locale} />
+	<Timeline index={1} locale={locale} collection="experiences" />
+	<Timeline index={2} locale={locale} collection="education" />
+	<Projects index={3} locale={locale} />
+	<Skills index={4} locale={locale} />
+	<Other index={5} locale={locale} />
 </main>

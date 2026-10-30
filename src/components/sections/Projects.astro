@@ -8,8 +8,8 @@ import { getLocalized, imageUrl } from '@lib/content';
 import { ALL_TECH } from '@/data/technologies';
 import { useTranslations, type Locale } from '@/i18n/ui';
 
-type Props = { index: number; delay: number; locale: Locale };
-const { index, delay, locale } = Astro.props;
+type Props = { index: number; locale: Locale };
+const { index, locale } = Astro.props;
 const t = useTranslations(locale).projects;
 
 const entries = await getLocalized('projects', locale);
@@ -26,11 +26,10 @@ const projects: ProjectData[] = await Promise.all(
 );
 ---
 
-<Container index={index} delay={delay} class="sm:px-4" id="projects">
+<Container index={index} class="sm:px-4" id="projects">
 	<ContainerTitle class="px-2 sm:px-4">{t.title}</ContainerTitle>
 	<ProjectGrid
 		client:visible
-		delay={delay}
 		projects={projects}
 		labels={{
 			links: t.links,

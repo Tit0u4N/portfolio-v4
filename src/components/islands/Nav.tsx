@@ -13,7 +13,7 @@ import {
 	TooltipTrigger,
 } from '@radix-ui/react-tooltip';
 import { Dock, DockIcon } from './Dock';
-import { PROFILE, type Locale } from '@/i18n/ui';
+import { PROFILE, localePath, useTranslations, type Locale } from '@/i18n/ui';
 
 type Theme = 'light' | 'dark';
 
@@ -79,6 +79,7 @@ export default function Nav({ locale, alternateHref }: NavProps) {
 
 	const themeLabel = theme === 'dark' ? 'Light' : 'Dark';
 	const localLabel = locale === 'en' ? 'Français' : 'English';
+	const homeLabel = useTranslations(locale).nav.home;
 
 	return (
 		<TooltipProvider delayDuration={100}>
@@ -89,6 +90,30 @@ export default function Nav({ locale, alternateHref }: NavProps) {
 						'fixed z-[200] inset-0 top-auto bottom-10 mx-auto animate-dock-slide-in'
 					}
 				>
+					<DockIcon className={itemClass}>
+						<Tooltip>
+							<TooltipTrigger asChild>
+								<a
+									href={`${localePath(locale)}#about`}
+									aria-label={homeLabel}
+									className={
+										'group-hover:scale-[1.3] transition duration-300 flex flex-col items-center'
+									}
+								>
+									<LogoMark className={'w-6 h-5'} />
+									<p className={'text-xs md:hidden mt-1'}>{homeLabel}</p>
+								</a>
+							</TooltipTrigger>
+							<TooltipContent
+								side="top"
+								align="center"
+								className={tooltipClass}
+							>
+								{homeLabel}
+							</TooltipContent>
+						</Tooltip>
+					</DockIcon>
+					{separator}
 					<DockIcon className={itemClass}>
 						<Tooltip>
 							<TooltipTrigger asChild>
@@ -191,6 +216,42 @@ export default function Nav({ locale, alternateHref }: NavProps) {
 				</Dock>
 			</nav>
 		</TooltipProvider>
+	);
+}
+
+/** Thickened cut of the logo (logo/final/svg/tlf-tile-small.svg), required below 48 px */
+function LogoMark({ className }: { className: string }) {
+	return (
+		<svg
+			className={`overflow-visible logo-loop ${className}`}
+			viewBox="8 32 240 196"
+			xmlns="http://www.w3.org/2000/svg"
+			aria-hidden="true"
+		>
+			<g transform="translate(-6 0)">
+				<g
+					fill="none"
+					stroke="currentColor"
+					strokeWidth="32"
+					strokeLinecap="round"
+					strokeLinejoin="round"
+				>
+					<path pathLength={1} d="M30 48H118" />
+					<path pathLength={1} d="M74 48V176A36 36 0 0 0 110 212H124" />
+					<path pathLength={1} d="M220 48H206A38 38 0 0 0 168 86V212" />
+					<path pathLength={1} d="M144 124H214" />
+				</g>
+				<rect
+					className="logo-cursor"
+					x="198"
+					y="196"
+					width="52"
+					height="32"
+					rx="4"
+					fill="currentColor"
+				/>
+			</g>
+		</svg>
 	);
 }
 

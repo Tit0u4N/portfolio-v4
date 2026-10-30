@@ -1,0 +1,53 @@
+---
+import { cn } from '@lib/utils';
+import { PROFILE } from '@/i18n/ui';
+
+// Geometry from logo/final/svg/tlf-symbol.svg, cropped to the mark's bounds.
+// Paths are split and ordered like handwriting so the mark can be traced.
+type Props = { animated?: boolean; class?: string };
+const { animated = false, class: className } = Astro.props;
+
+const strokes = [
+	{ d: 'M30 48H118', delay: 0, duration: 0.3 },
+	{ d: 'M74 48V176A36 36 0 0 0 110 212H124', delay: 0.08, duration: 0.45 },
+	{ d: 'M220 48H206A38 38 0 0 0 168 86V212', delay: 0.24, duration: 0.45 },
+	{ d: 'M144 124H214', delay: 0.38, duration: 0.25 },
+];
+---
+
+<svg
+	viewBox="12 36 232 188"
+	role="img"
+	aria-label={PROFILE.name}
+	class={cn(
+		'h-auto overflow-visible logo-loop',
+		animated && 'logo-animated',
+		className,
+	)}
+>
+	<g transform="translate(-6 0)">
+		<g
+			fill="none"
+			stroke="currentColor"
+			stroke-width="24"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+		>
+			{strokes.map(({ d, delay, duration }) => (
+				<path
+					{d}
+					pathLength="1"
+					style={`--trace-delay:${delay}s;--trace-duration:${duration}s`}
+				/>
+			))}
+		</g>
+		<rect
+			class="logo-cursor"
+			x="198"
+			y="200"
+			width="52"
+			height="24"
+			rx="4"
+			fill="currentColor"></rect>
+	</g>
+</svg>

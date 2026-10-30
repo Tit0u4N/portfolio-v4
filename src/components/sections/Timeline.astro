@@ -8,11 +8,10 @@ import { useTranslations, type Locale } from '@/i18n/ui';
 
 type Props = {
 	index: number;
-	delay: number;
 	locale: Locale;
 	collection: 'experiences' | 'education';
 };
-const { index, delay, locale, collection } = Astro.props;
+const { index, locale, collection } = Astro.props;
 const t = useTranslations(locale)[collection];
 
 const entries = await getLocalized(collection, locale);
@@ -29,7 +28,7 @@ const items: AccordionData[] = await Promise.all(
 );
 ---
 
-<Container index={index} delay={delay} id={collection}>
+<Container index={index} id={collection}>
 	<ContainerTitle>{t.title}</ContainerTitle>
-	<Accordion client:visible delay={delay} items={items} />
+	<Accordion client:visible items={items} />
 </Container>

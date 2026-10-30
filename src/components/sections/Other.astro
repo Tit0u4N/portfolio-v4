@@ -4,8 +4,8 @@ import ContainerTitle from '@/components/ContainerTitle.astro';
 import { GithubLogo, LinkedinIcon, MailIcon } from '@/components/ui/icons';
 import { PROFILE, useTranslations, type Locale } from '@/i18n/ui';
 
-type Props = { index: number; delay: number; locale: Locale };
-const { index, delay, locale } = Astro.props;
+type Props = { index: number; locale: Locale };
+const { index, locale } = Astro.props;
 const t = useTranslations(locale).other;
 
 const links = [
@@ -17,9 +17,9 @@ const links = [
 ] as const;
 ---
 
-<Container index={index} delay={delay} class="mb-10" id="contact">
+<Container index={index} class="mb-4" id="contact">
 	<ContainerTitle>{t.title}</ContainerTitle>
-	<div class="flex gap-6 mb-20">
+	<div class="flex gap-6">
 		<address class="flex flex-col gap-2 ms-3 not-italic">
 			{links.map(({ href, label, icon }) => (
 				<a
@@ -29,7 +29,7 @@ const links = [
 					rel="noopener noreferrer"
 				>
 					{icon === 'github' && (
-						<GithubLogo className="fill-dark dark:fill-white size-6" />
+						<GithubLogo className="fill-foreground size-6" />
 					)}
 					{icon === 'mail' && <MailIcon />}
 					{icon === 'linkedin' && <LinkedinIcon />}

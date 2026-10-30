@@ -78,5 +78,53 @@ const description = Astro.props.description ?? t.meta.description;
 			alternateHref={localePath(otherLocale(locale))}
 		/>
 		<slot />
+		<!-- Marks the current section: its cursor blinks (see global.css).
+		     The reading line slides down the viewport so the last, short section can win. -->
+		<script is:inline>
+			(() => {
+				const sections = [...document.querySelectorAll('section[id]')];
+				let active = null;
+				let queued = false;
+				const update = () => {
+					queued = false;
+					const max = document.documentElement.scrollHeight - innerHeight;
+					const progress = max > 0 ? Math.min(scrollY / max, 1) : 0;
+					const line = innerHeight * (0.3 + 0.7 * progress);
+					const next =
+						sections.findLast((s) => s.getBoundingClientRect().top <= line) ??
+						sections[0];
+					if (next === active) return;
+					active?.removeAttribute('data-active');
+					next?.setAttribute('data-active', '');
+					active = next;
+				};
+				const queue = () => {
+					if (queued) return;
+					queued = true;
+					requestAnimationFrame(update);
+				};
+				addEventListener('scroll', queue, { passive: true });
+				addEventListener('resize', queue, { passive: true });
+				update();
+
+				// Logo hover loop: on leave, it finishes its cycle instead of snapping back
+				document.querySelectorAll('.logo-loop').forEach((logo) => {
+					const zone = logo.closest('a') ?? logo;
+					let hovered = false;
+					zone.addEventListener('pointerenter', (e) => {
+						if (e.pointerType === 'touch') return;
+						hovered = true;
+						logo.classList.add('is-looping');
+					});
+					zone.addEventListener('pointerleave', () => {
+						hovered = false;
+					});
+					logo.addEventListener('animationiteration', (e) => {
+						if (!hovered && e.animationName === 'logo-loop-cursor')
+							logo.classList.remove('is-looping');
+					});
+				});
+			})();
+		</script>
 	</body>
 </html>
