@@ -16,8 +16,12 @@ type Props = {
 	title?: string;
 	description?: string;
 	noindex?: boolean;
+	/** URL of the same page in the other locale (defaults to its home) */
+	alternateHref?: string;
 };
 const { locale, noindex } = Astro.props;
+const alternateHref =
+	Astro.props.alternateHref ?? localePath(otherLocale(locale));
 const t = useTranslations(locale);
 const title = Astro.props.title ?? t.meta.title;
 const description = Astro.props.description ?? t.meta.description;
@@ -72,11 +76,7 @@ const description = Astro.props.description ?? t.meta.description;
 			strokeDasharray="4 2"
 			class="sm:[mask-image:radial-gradient(60vw_circle_at_center,white,transparent)] fixed"
 		/>
-		<Nav
-			client:load
-			locale={locale}
-			alternateHref={localePath(otherLocale(locale))}
-		/>
+		<Nav client:load locale={locale} alternateHref={alternateHref} />
 		<slot />
 		<!-- Marks the current section: its cursor blinks (see global.css).
 		     The reading line slides down the viewport so the last, short section can win. -->

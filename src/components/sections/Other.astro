@@ -2,11 +2,12 @@
 import Container from '@/components/Container.astro';
 import ContainerTitle from '@/components/ContainerTitle.astro';
 import { GithubLogo, LinkedinIcon, MailIcon } from '@/components/ui/icons';
-import { PROFILE, useTranslations, type Locale } from '@/i18n/ui';
+import { PROFILE, legalPath, useTranslations, type Locale } from '@/i18n/ui';
 
 type Props = { index: number; locale: Locale };
 const { index, locale } = Astro.props;
-const t = useTranslations(locale).other;
+const dict = useTranslations(locale);
+const t = dict.other;
 
 const links = [
 	{ href: PROFILE.githubLink, label: PROFILE.github, icon: 'github' },
@@ -38,4 +39,7 @@ const links = [
 			))}
 		</address>
 	</div>
+	<a href={legalPath(locale)} class="inline-block mt-6 ms-3 text-sm underline">
+		{dict.legal.title}
+	</a>
 </Container>

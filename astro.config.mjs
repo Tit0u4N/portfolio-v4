@@ -21,7 +21,7 @@ export default defineConfig({
 		react(),
 		sitemap({
 			i18n: { defaultLocale: 'fr', locales: { fr: 'fr-FR', en: 'en-US' } },
-			filter: (page) => !page.includes('/404'),
+			filter: (page) => !/\/(404|mentions-legales|legal-notice)/.test(page),
 		}),
 	],
 	vite: { plugins: [tailwindcss()] },

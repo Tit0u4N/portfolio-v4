@@ -20,7 +20,11 @@ const { locale, title, description, noindex = false } = Astro.props;
 const t = useTranslations(locale);
 
 const site = Astro.site!;
-const canonical = new URL(localePath(locale), site).href;
+// Noindex pages must not declare the home page as their canonical
+const canonical = new URL(
+	noindex ? Astro.url.pathname : localePath(locale),
+	site,
+).href;
 const ogImage = await getImage({
 	src: profileImage,
 	width: 600,

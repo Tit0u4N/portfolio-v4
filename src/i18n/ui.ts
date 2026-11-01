@@ -46,6 +46,42 @@ const fr = {
 		dark: 'Dark',
 	},
 	notFound: { title: 'Page introuvable', back: "Retour à l'accueil" },
+	legal: {
+		title: 'Mentions légales',
+		description: 'Mentions légales et confidentialité du site titouanlf.com.',
+		contact: 'Contact :',
+		back: "Retour à l'accueil",
+		sections: [
+			{
+				title: 'Éditeur du site',
+				body: [
+					`Ce site est édité à titre personnel et non professionnel par ${PROFILE.name}, également directeur de la publication.`,
+					"Conformément à la loi pour la confiance dans l'économie numérique (LCEN), ses coordonnées personnelles ne sont pas publiées et ont été communiquées à l'hébergeur.",
+				],
+				showContact: true,
+			},
+			{
+				title: 'Hébergement',
+				body: [
+					'Cloudflare, Inc., 101 Townsend Street, San Francisco, CA 94107, États-Unis. Téléphone : +1 888 993 5273.',
+				],
+			},
+			{
+				title: 'Propriété intellectuelle',
+				body: [
+					"Sauf mention contraire, les textes et visuels de ce site appartiennent à l'éditeur et ne peuvent pas être réutilisés sans son accord. Les logos et marques cités restent la propriété de leurs titulaires respectifs.",
+				],
+			},
+			{
+				title: 'Données personnelles et cookies',
+				body: [
+					"Ce site ne dépose aucun cookie, n'utilise aucun outil de mesure d'audience et ne comporte aucun formulaire. Votre choix de thème clair ou sombre est conservé uniquement dans votre navigateur.",
+					"Pour assurer le fonctionnement et la sécurité du site, l'hébergeur traite des données techniques de connexion, comme l'adresse IP, et peut les traiter hors de l'Union européenne.",
+					'Vous pouvez exercer vos droits sur vos données via le contact indiqué ci-dessus et introduire une réclamation auprès de la CNIL (cnil.fr).',
+				],
+			},
+		],
+	},
 };
 
 type Dict = typeof fr;
@@ -88,6 +124,42 @@ const en: Dict = {
 		dark: 'Dark',
 	},
 	notFound: { title: 'Page not found', back: 'Back to home' },
+	legal: {
+		title: 'Legal notice',
+		description: 'Legal notice and privacy information for titouanlf.com.',
+		contact: 'Contact:',
+		back: 'Back to home',
+		sections: [
+			{
+				title: 'Site publisher',
+				body: [
+					`This site is published in a personal, non-professional capacity by ${PROFILE.name}, who is also the publication director.`,
+					"In accordance with the French law on confidence in the digital economy (LCEN), the publisher's personal contact details are not published and have been provided to the hosting provider.",
+				],
+				showContact: true,
+			},
+			{
+				title: 'Hosting',
+				body: [
+					'Cloudflare, Inc., 101 Townsend Street, San Francisco, CA 94107, United States. Phone: +1 888 993 5273.',
+				],
+			},
+			{
+				title: 'Intellectual property',
+				body: [
+					'Unless stated otherwise, the text and visuals on this site belong to the publisher and may not be reused without permission. Logos and trademarks mentioned remain the property of their respective owners.',
+				],
+			},
+			{
+				title: 'Personal data and cookies',
+				body: [
+					'This site sets no cookies, uses no audience measurement tools and has no forms. Your light or dark theme choice is stored only in your browser.',
+					'To keep the site running and secure, the hosting provider processes technical connection data, such as IP addresses, and may process it outside the European Union.',
+					'You can exercise your data rights through the contact given above and lodge a complaint with the CNIL, the French data protection authority (cnil.fr).',
+				],
+			},
+		],
+	},
 };
 
 const dictionaries: Record<Locale, Dict> = { fr, en };
@@ -96,5 +168,7 @@ export const useTranslations = (locale: Locale) => dictionaries[locale];
 
 export const localePath = (locale: Locale) =>
 	locale === DEFAULT_LOCALE ? '/' : `/${locale}/`;
+export const legalPath = (locale: Locale) =>
+	locale === DEFAULT_LOCALE ? '/mentions-legales/' : '/en/legal-notice/';
 export const otherLocale = (locale: Locale): Locale =>
 	locale === 'fr' ? 'en' : 'fr';

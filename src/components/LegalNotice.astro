@@ -1,0 +1,63 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Container from '@/components/Container.astro';
+import {
+	PROFILE,
+	legalPath,
+	localePath,
+	otherLocale,
+	useTranslations,
+	type Locale,
+} from '@/i18n/ui';
+
+type Props = { locale: Locale };
+const { locale } = Astro.props;
+const t = useTranslations(locale).legal;
+
+// LinkedIn stays the contact channel while no public address is set
+const contact = PROFILE.mail
+	? { href: `mailto:${PROFILE.mail}`, label: PROFILE.mail }
+	: { href: PROFILE.linkdinLink, label: 'LinkedIn' };
+---
+
+<BaseLayout
+	locale={locale}
+	title={`${t.title} · ${PROFILE.name}`}
+	description={t.description}
+	alternateHref={legalPath(otherLocale(locale))}
+	noindex
+>
+	<main class="flex flex-col justify-start items-center min-h-[100vh] pb-28">
+		<Container index={0} id="legal">
+			<h1 class="text-4xl text-neutral-900 dark:text-neutral-100 mb-8">
+				{t.title}
+			</h1>
+			{t.sections.map(({ title, body, showContact }) => (
+				<div class="mb-8">
+					<h2 class="text-xl text-neutral-900 dark:text-neutral-100 mb-2">
+						{title}
+					</h2>
+					{body.map((paragraph) => (
+						<p class="mb-2">{paragraph}</p>
+					))}
+					{showContact && (
+						<p>
+							{t.contact}{' '}
+							<a
+								href={contact.href}
+								class="underline"
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								{contact.label}
+							</a>
+						</p>
+					)}
+				</div>
+			))}
+			<a href={localePath(locale)} class="underline">
+				{t.back}
+			</a>
+		</Container>
+	</main>
+</BaseLayout>
