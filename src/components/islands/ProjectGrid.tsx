@@ -1,4 +1,10 @@
-import { useCallback, useEffect, useState, type RefObject } from 'react';
+import {
+	useCallback,
+	useEffect,
+	useRef,
+	useState,
+	type RefObject,
+} from 'react';
 import { delay as doDelay } from 'motion/react';
 import { cn, hasParentWithAttribute } from '@lib/utils';
 import type { TechnologyData } from '@/data/technologies';
@@ -42,13 +48,34 @@ export default function ProjectGrid({
 	const [projectOpen, setProjectOpen] = useState<ProjectOpen | null>(null);
 	// z-index class per item: raised while open, kept above siblings during close animation
 	const [zClasses, setZClasses] = useState<Record<number, string>>({});
+	const gridRef = useRef<HTMLDivElement>(null);
+	const isRaised = Object.values(zClasses).some(Boolean);
+
+	// Sections stack in descending order, so lift ours above them all (not the dock)
+	// or the open project slides under the previous section
+	useEffect(() => {
+		const section = gridRef.current?.closest('section');
+		if (!section || !isRaised) return;
+		const zIndex = section.style.zIndex;
+		section.style.zIndex = '101';
+		return () => {
+			section.style.zIndex = zIndex;
+		};
+	}, [isRaised]);
 
 	const handleProjectOpen = useCallback(
 		(projectToOpen: ProjectOpen | null) => {
 			if (projectOpen) {
 				const closingId = projectOpen.id;
 				setZClasses((z) => ({ ...z, [closingId]: 'z-10' }));
-				doDelay(() => setZClasses((z) => ({ ...z, [closingId]: '' })), 600);
+				// Skip the reset if the project was reopened during the close animation
+				doDelay(
+					() =>
+						setZClasses((z) =>
+							z[closingId] === 'z-10' ? { ...z, [closingId]: '' } : z,
+						),
+					600,
+				);
 			}
 			if (projectToOpen) {
 				setZClasses((z) => ({ ...z, [projectToOpen.id]: 'z-50' }));
@@ -84,6 +111,7 @@ export default function ProjectGrid({
 
 	return (
 		<div
+			ref={gridRef}
 			className={cn(
 				'grid md:auto-rows-[18rem] grid-cols-2 md:grid-cols-3 gap-2 sm:gap-4 max-w-7xl mx-auto ',
 				className,

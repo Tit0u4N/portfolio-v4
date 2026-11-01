@@ -97,9 +97,10 @@ export default function ProjectItem({
 				role={isOpen ? 'dialog' : undefined}
 				aria-modal={isOpen || undefined}
 				aria-label={isOpen ? project.title : undefined}
+				onClick={openModal}
 				className={cn(
 					'rounded-xl bg-card',
-					isOpen ? 'shadow-standard-demune' : '',
+					isOpen ? 'shadow-standard-demune' : 'cursor-pointer',
 				)}
 				animate={{
 					x: isOpen ? geo.x : 0,
@@ -173,7 +174,6 @@ export default function ProjectItem({
 										className={
 											'flex flex-1 size-full rounded-xl object-cover shadow-standard'
 										}
-										onClick={openModal}
 										alt={project.title}
 									/>
 								</motion.div>
@@ -188,7 +188,6 @@ export default function ProjectItem({
 											<button
 												ref={titleRef}
 												type="button"
-												onClick={openModal}
 												aria-expanded={isOpen}
 												className="text-left"
 											>
